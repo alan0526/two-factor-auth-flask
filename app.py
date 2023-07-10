@@ -33,6 +33,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
     otp_secret = db.Column(db.String(16))
+    interval = 30
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -52,10 +53,10 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def get_totp_uri(self):
-        return pyotp.totp.TOTP(self.otp_secret).provisioning_uri(name=self.username, issuer_name='Nextas')
+        return pyotp.TOTP(self.otp_secret, interval=self.interval).provisioning_uri(name=self.username, issuer_name='Nextas')
 
     def verify_totp(self, token):
-        return pyotp.TOTP(self.otp_secret).verify(token)
+        return pyotp.TOTP(self.otp_secret, interval=self.interval).verify(token)
 
 
 @lm.user_loader
