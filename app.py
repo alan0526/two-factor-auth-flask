@@ -13,7 +13,7 @@ from wtforms import StringField, PasswordField, SubmitField
 # from wtforms.validators import Required, Length, EqualTo
 from wtforms.validators import Length, EqualTo
 from wtforms.validators import DataRequired as Required
-import onetimepass
+import pyotp
 import pyqrcode
 
 # create application instance
@@ -38,7 +38,7 @@ class User(UserMixin, db.Model):
         super(User, self).__init__(**kwargs)
         if self.otp_secret is None:
             # generate a random secret
-            self.otp_secret = base64.b32encode(os.urandom(10)).decode('utf-8')
+            self.otp_secret = pyotp.random_base32()
 
     @property
     def password(self):
@@ -56,7 +56,7 @@ class User(UserMixin, db.Model):
             .format(self.username, self.otp_secret)
 
     def verify_totp(self, token):
-        return onetimepass.valid_totp(token, self.otp_secret)
+        return pyotp.TOTP(self.otp_secret).verify(token)
 
 
 @lm.user_loader
