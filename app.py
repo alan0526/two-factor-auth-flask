@@ -52,7 +52,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def get_totp_uri(self):
-        return 'otpauth://totp/2FA-Demo:{0}?secret={1}&issuer=2FA-Demo' \
+        return 'otpauth://totp/Nextas:{0}?secret={1}&issuer=Nextas' \
             .format(self.username, self.otp_secret)
 
     def verify_totp(self, token):
