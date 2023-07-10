@@ -10,7 +10,9 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, \
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import Required, Length, EqualTo
+# from wtforms.validators import Required, Length, EqualTo
+from wtforms.validators import Length, EqualTo
+from wtforms.validators import DataRequired as Required
 import onetimepass
 import pyqrcode
 
@@ -174,7 +176,8 @@ def logout():
 
 
 # create database tables if they don't exist yet
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 
 if __name__ == '__main__':
