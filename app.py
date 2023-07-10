@@ -147,7 +147,7 @@ def qrcode():
         'Expires': '0'}
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
     """User login route."""
     if current_user.is_authenticated:
@@ -181,4 +181,4 @@ with app.app_context():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)
