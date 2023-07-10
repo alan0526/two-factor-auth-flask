@@ -52,8 +52,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def get_totp_uri(self):
-        return 'otpauth://totp/Nextas:{0}?secret={1}&issuer=Nextas' \
-            .format(self.username, self.otp_secret)
+        return pyotp.totp.TOTP(self.otp_secret).provisioning_uri(name=self.username, issuer_name='Nextas')
 
     def verify_totp(self, token):
         return pyotp.TOTP(self.otp_secret).verify(token)
